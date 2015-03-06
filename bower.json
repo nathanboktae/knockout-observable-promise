@@ -1,0 +1,33 @@
+{
+  "name": "knockout-observable-promise",
+  "main": "observable-promise.js",
+  "version": "0.5.0",
+  "homepage": "https://github.com/nathanboktae/knockout-observable-promise",
+  "authors": [
+    "Nathan Black <nathan@nathanblack.org>"
+  ],
+  "description": "Hide knockout observables behind ES5 properties - no WeakMap needed",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "knockout",
+    "extender",
+    "extension",
+    "observable",
+    "promise",
+    "thenable"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {
+    "knockout": ">= 2.3.0 < 4.0.0"
+  }
+}
