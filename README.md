@@ -5,9 +5,7 @@
 
 Working with data from our server, we often want to show loading status or want to chain other work dependent on an asyncrounous task. `knockout-observable-promise` is observable [extender](http://knockoutjs.com/documentation/extenders.html) that will wire up to a promise automatically if it is assigned one.
 
-Example:
-
-View model:
+#### Examples
 
 ```javascript
 var name = ko.observable(),
@@ -33,11 +31,11 @@ ko.applyBindings(document.body, {
     } else {
       return $.Deferred().promise()
     }
-  }).extend({ throttle: 100, promise: { convert: true } })
+  }).extend({ throttle: 100, promise: true })
 })
 ```
 
-Markup:
+View:
 
 ```html
 <style>.loading { background-image: url(loading.gif); }</style>
@@ -74,7 +72,7 @@ ko.applyBindings(document.body, {
 })
 ```
 
-Markup:
+View:
 
 ```html
 <style>.loading { background-image: url(loading.gif); }</style>
