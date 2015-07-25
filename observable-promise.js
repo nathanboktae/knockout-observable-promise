@@ -10,18 +10,22 @@
   }
 })(function(ko) {
 
-  ko.extenders.promise = function(target) {
+  ko.extenders.promise = function(target, option) {
     var wrapper = ko['pureComputed' in ko ? 'pureComputed' : 'computed']({
       read: target,
-      write: function(newValue) {
-        target(newValue)
-        if (newValue && typeof newValue.then === 'function') {
-          var notify = function() {
-            if (target.peek() === newValue) {
-              target.notifySubscribers()
+      write: function(newObservable) {
+        target(newObservable)
+        if (newObservable && typeof newObservable.then === 'function') {
+          var notify = function(newVal) {
+            if (target.peek() === newObservable) {
+              if (option && option.convert) {
+                target(newVal)
+              } else {
+                target.notifySubscribers()
+              }
             }
           }
-          newValue.then(notify, notify)
+          newObservable.then(notify, notify)
         }
       }
     })
