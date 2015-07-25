@@ -39,7 +39,7 @@ ko.applyBindings(document.body, {
 
 Markup:
 
-```
+```html
 <style>.loading { background-image: url(loading.gif); }</style>
 <form>
   <h1>Search for a person</h1>
@@ -76,7 +76,7 @@ ko.applyBindings(document.body, {
 
 Markup:
 
-```
+```html
 <style>.loading { background-image: url(loading.gif); }</style>
 <form>
   <h1>Search for a person</h1>
