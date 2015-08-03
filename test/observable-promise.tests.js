@@ -1,5 +1,5 @@
 describe('observable promise extension', function() {
-  var ko = require('../'),
+  var ko = require('../')(require('knockout')),
       Q = require('q'),
       chai = require('chai'),
       sinon = require('sinon'),

@@ -3,7 +3,7 @@
     define(['knockout'], factory)
   } else if (typeof exports === 'object' && typeof module === 'object') {
     /*global module*/
-    module.exports = factory(require('knockout'))
+    module.exports = factory
   } else {
     /*global ko*/
     factory(ko)

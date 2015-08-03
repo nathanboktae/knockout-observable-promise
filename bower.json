@@ -1,12 +1,11 @@
 {
   "name": "knockout-observable-promise",
   "main": "observable-promise.js",
-  "version": "0.5.0",
   "homepage": "https://github.com/nathanboktae/knockout-observable-promise",
   "authors": [
     "Nathan Black <nathan@nathanblack.org>"
   ],
-  "description": "Hide knockout observables behind ES5 properties - no WeakMap needed",
+  "description": "Easily wire up knockout observables to promises",
   "moduleType": [
     "amd",
     "globals",
