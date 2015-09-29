@@ -93,3 +93,7 @@ View:
   </p>
 </form>
 ```
+
+### Differences from [ko.promise](https://github.com/jrsearles/ko-promise)
+
+`ko.promise` intends to make observables and promises the same object, letting you use them interchangably for cases when you do have one asyncrounous operation to model. That's not the goal of `knockout-observable-promise` - the observable is not a promise, nor does it have to be, and it can assigned new promises that are wired up again in the future, whereas `ko.promise` cannot since once a promise is resolved or rejected, it cannot change - a promise is an async operation, not a pub-sub mechanism. They are different problems, so choose the library that you need.

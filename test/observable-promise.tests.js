@@ -93,6 +93,15 @@ describe('observable promise extension', function() {
       return deferred.promise.then(undefined, function() { return true })
     })
 
+    it('should be aliased as ko.observablePromise', function() {
+      observable = ko.observablePromise(deferred.promise)
+      observable.subscribe(function(val) {
+        val.should.equal('hi')
+      })
+      deferred.resolve('hi')
+      return deferred.promise
+    })
+
     commonTests(true)
   })
 })

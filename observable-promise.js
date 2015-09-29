@@ -34,5 +34,9 @@
     return wrapper
   }
 
+  ko.observablePromise = function() {
+    return ko.observable.apply(ko, arguments).extend({ promise: { convert: true } })
+  }
+
   return ko
 })
