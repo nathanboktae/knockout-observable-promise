@@ -1,6 +1,6 @@
 {
   "name": "knockout-observable-promise",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A knockout observable extension to automatically, transparently chain onto promises",
   "main": "observable-promise.js",
   "directories": {
