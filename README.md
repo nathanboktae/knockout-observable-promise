@@ -28,10 +28,8 @@ ko.applyBindings(document.body, {
       }).then(function(resp) {
         user(resp.data)
       })
-    } else {
-      return $.Deferred().promise()
     }
-  }).extend({ throttle: 100, promise: true })
+  }).extend({ throttle: 100, promise: 'status' })
 })
 ```
 
@@ -46,16 +44,49 @@ View:
   <label for="age">Age</label>
   <input name="age" data-bind="value: age"></input>
 
-  <div data-bind="css: { loading: findUser().state() === 'pending' }">
+  <div data-bind="css: { loading: findUser() === 'pending' }">
     <!-- ko if: $root.user() -->
       <p data-bind="text: 'found user ' + $root.user().username">
     <!-- /ko -->
   </div>
-  <p class="error" data-bind="visible: findUser().state() === 'rejected'">An error occoured looking for that user!</p>
+  <p class="error" data-bind="visible: findUser() === 'rejected'">An error occoured looking for that user!</p>
 </form>
 ```
 
-You can optionally have the observable convert to the resolve or rejected value if that is convient to you
+By default, the original promise is returned as the value so others may chain onto it if they wish. (Note: `isPending`, `isResolved`, and `isRejected` are not standard Promise functions but available on some promise libraries like [bluebird](https://github.com/petkaantonov/bluebird) and [q](https://github.com/kriskowal/q))
+
+```javascript
+var name = ko.observable(),
+    age = ko.observable(),
+    user = ko.observable(),
+
+findUser = ko.computed(function() {
+  if (name() && age()) {
+    return axios.get('/users/search', {
+      params: {
+        name: name(),
+        age: age()
+      }
+    }).then(function(resp) {
+      user(resp.data)
+    })
+  }
+}).extend({ throttle: 100, promise: true })
+
+ko.applyBindings(document.body, {
+  name, age, user, findUser,
+
+  message: function() {
+    var finding = findUser()
+    if (!finding) return 'Enter a name and age'
+    if (finding.isPending()) return `Searching for ${name()}...`
+    if (finding.isRejected()) return `Could not find ${name()} at age ${age()}`
+    return `Found ${name()}!`
+  }
+})
+```
+
+You can optionally have the observable convert to the resolve or rejected value if that is convient to you by using the `convert` mode:
 
 
 ```javascript
@@ -68,7 +99,7 @@ ko.applyBindings(document.body, {
 
   user: ko.computed(function() {
     return lookupUser(name(), age())
-  }).extend({ throttle: 100, promise: { convert: true } })
+  }).extend({ throttle: 100, promise: 'convert' })
 })
 ```
 
@@ -83,16 +114,18 @@ View:
   <label for="age">Age</label>
   <input name="age" data-bind="value: age"></input>
 
-  <div data-bind="css: { loading: user() && user().state && user().state() === 'pending' }">
+  <div data-bind="css: { loading: user() && user().isPending && user().isPending() }">
     <!-- ko if: $root.user().username -->
       <p data-bind="text: 'found user ' + $root.user().username">
     <!-- /ko -->
   </div>
-  <p class="error" data-bind="visible: user() && user().state && user().state() === 'rejected'">
+  <p class="error" data-bind="visible: user() && user().isPending && user().isRejected()">
     An error occoured looking for that user!
   </p>
 </form>
 ```
+
+Since the `convert` mode is very common, `ko.observablePromise` is an alias for creating an observable with the `promise: "convert"` extender.
 
 ### Differences from [ko.promise](https://github.com/jrsearles/ko-promise)
 

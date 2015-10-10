@@ -10,23 +10,36 @@
   }
 })(function(ko) {
 
-  ko.extenders.promise = function(target, option) {
+  ko.extenders.promise = function(target, mode) {
     var wrapper = ko['pureComputed' in ko ? 'pureComputed' : 'computed']({
-      read: target,
-      write: function(newObservable) {
-        target(newObservable)
-        if (newObservable && typeof newObservable.then === 'function') {
-          var notify = function(newVal) {
-            if (target.peek() === newObservable) {
-              if (option && option.convert) {
-                target(newVal)
+      read: mode !== 'status' ? target : function() {
+        var val = target()
+        return (val && val.__status) || val
+      },
+      write: function(newValue) {
+        if (newValue && typeof newValue.then === 'function') {
+          if (mode === 'status') {
+            Object.defineProperty(newValue, '__status', {
+              value: 'pending',
+              writable: true
+            })
+          }
+          var notify = function(success, asyncResult) {
+            var currTarget = target.peek()
+            if (currTarget === newValue) {
+              if (mode === 'convert') {
+                target(asyncResult)
               } else {
+                if (mode === 'status') {
+                  currTarget.__status = success ? 'resolved' : 'rejected'
+                }
                 target.notifySubscribers()
               }
             }
           }
-          newObservable.then(notify, notify)
+          newValue.then(notify.bind(null, true), notify.bind(null, false))
         }
+        target(newValue)
       }
     })
 
@@ -35,7 +48,7 @@
   }
 
   ko.observablePromise = function() {
-    return ko.observable.apply(ko, arguments).extend({ promise: { convert: true } })
+    return ko.observable.apply(ko, arguments).extend({ promise: 'convert' })
   }
 
   return ko
