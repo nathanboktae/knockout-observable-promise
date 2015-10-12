@@ -114,12 +114,12 @@ View:
   <label for="age">Age</label>
   <input name="age" data-bind="value: age"></input>
 
-  <div data-bind="css: { loading: user() && user().isPending && user().isPending() }">
+  <div data-bind="css: { loading: user().isPending && user().isPending() }">
     <!-- ko if: $root.user().username -->
       <p data-bind="text: 'found user ' + $root.user().username">
     <!-- /ko -->
   </div>
-  <p class="error" data-bind="visible: user() && user().isPending && user().isRejected()">
+  <p class="error" data-bind="visible: user().isRejected && user().isRejected()">
     An error occoured looking for that user!
   </p>
 </form>

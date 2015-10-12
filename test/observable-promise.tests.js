@@ -109,6 +109,18 @@ describe('observable promise extension', function() {
       return deferred.promise
     })
 
+    it('should not take a dependency on the target', function() {
+      var origObservable = ko.observable(),
+      comp = ko.computed(function() {
+        return origObservable.extend({ promise: 'convert' })
+      })
+      comp.subscribe(function() {
+        throw new Error('Should not have created a subscription!')
+      })
+      origObservable.notifySubscribers()
+      comp().notifySubscribers()
+    })
+
     commonTests('convert')
   })
 
@@ -140,6 +152,18 @@ describe('observable promise extension', function() {
         }
       })
       deferred.reject(new Error('oops'))
+    })
+
+    it('should not take a dependency on the target', function() {
+      var origObservable = ko.observable(),
+      comp = ko.computed(function() {
+        return origObservable.extend({ promise: 'status' })
+      })
+      comp.subscribe(function() {
+        throw new Error('Should not have created a subscription!')
+      })
+      origObservable.notifySubscribers()
+      comp().notifySubscribers()
     })
 
     commonTests('status')

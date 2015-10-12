@@ -43,7 +43,7 @@
       }
     })
 
-    wrapper(target())
+    wrapper(target.peek())
     return wrapper
   }
 
